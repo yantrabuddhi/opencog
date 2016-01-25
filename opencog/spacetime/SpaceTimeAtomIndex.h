@@ -1,24 +1,55 @@
 #ifndef SPACE_TIME_ATOM_INDEX_H
 #define SPACE_TIME_ATOM_INDEX_H
+
+#include <vector>
 #include <list>
-enum unit{MM,CM,M,KM};
-struct space_block{float x1,y1,z1;int delta;unit u;};//meter, cm,mm
-struct sta_space;
-struct time_interval{
-  time;int delay;
+#include <map>
+using namespace std;
+
+//template <class handle>
+struct location{
+  int x,y,z;
+  //handle h;//atom ptr
+  bool operator==(location& rhs){
+    return (x==rhs.x && y==rhs.y && z==rhs.z);
+  }
+  bool operator < (location& rhs){
+    if (x<rhs.x)return true;
+    if (x==rhs.x && y<rhs.y)return true;
+    if (x==rhs.x && y==rhs.y && z<rhs.z)return true;
+    return false;
+  }
 };
-struct sta_time{time_interval, sta_space* };
-struct sta_space{space_block};
-typedef list<time_interval> time_interval_list;
-typedef list<space_block> space_block_list;
-typedef list<sta_space>space_list;
-typedef list<sta_time> time_list;
+
+template <class handle>
+struct time_unit{
+  time_point t;
+  map<location,handle> *m;
+};
+//cicular buffer
+template <class handle>
+struct time_circle{
+  unsigned int num_time_unit;
+  int start,stop;
+  time_point start_t,stop_t;
+  vector<time_unit<handle>>vt;
+  time_circle(unsigned int time_units)num_time_unit(time_units),start(0),stop(-1){
+    vt.reserve(time_units);
+  }
+};
 //API
 template <class handle>
 class SpaceTimeAtomIndex{
+  unsigned int num_time_unit;float space_res;
+  float originX,originY,originZ;
+  time_circle<handle>t_circle;
 public:
-  bool put(handle atom,time_interval t,location* l=NULL);
-  handle get(time_interval t,location *l=NULL);
+  SpaceTimeAtomIndex(unsigned int num_time_units,float space_resolution,float oX,float oY,float oZ);
+  void getResOrigin(float& res,float& oX,float& oY,float& oZ){
+    res=space_res;oX=originX;oY=originY;oZ=originZ;
+  }
+  bool put(handle atom,time_point t,location *l=NULL);
+  handle get(time_point t,location *l=NULL);
   time_interval_list get(handle atom,location l);
   space_block_list get(handle atom,time_interval t);
 }
