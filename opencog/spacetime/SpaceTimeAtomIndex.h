@@ -20,7 +20,7 @@ struct location{
     return false;
   }
 };
-
+//handle has to be pointer
 template <class handle>
 struct time_unit{
   time_point t;
@@ -28,29 +28,37 @@ struct time_unit{
 };
 //cicular buffer
 template <class handle>
-struct time_circle{
-  unsigned int num_time_unit;
-  int start,stop;
-  time_point start_t,stop_t;
-  vector<time_unit<handle>>vt;
-  time_circle(unsigned int time_units)num_time_unit(time_units),start(0),stop(-1){
-    vt.reserve(time_units);
-  }
-};
-//API
-template <class handle>
-class SpaceTimeAtomIndex{
-  unsigned int num_time_unit;float space_res;
+class time_circle{
+  unsigned int num_time_unit;float time_res,space_res;//time resolution and space resolution
   float originX,originY,originZ;
-  time_circle<handle>t_circle;
+
+  int curr_t,start,stop;//start,stop is vector index of start,stop curr_t is index current vector of time
+  time_point start_t;//current start of time
+  vector<time_unit<handle>>vt;
+
 public:
-  SpaceTimeAtomIndex(unsigned int num_time_units,float space_resolution,float oX,float oY,float oZ);
-  void getResOrigin(float& res,float& oX,float& oY,float& oZ){
-    res=space_res;oX=originX;oY=originY;oZ=originZ;
+  time_circle(unsigned int time_units,time_point start_time,float time_res_seconds,float space_resolution,float oX,float oY,float oZ):
+  num_time_unit(time_units),curr_t(0),start(0),start_t(start_time),time_res(time_res_seconds){
+    vt.reserve(time_units);
+    for (int a=0;a<time_units;a++){
+      vt[a].m=new map<location,handle>;
+    }
   }
+  ~time_circle(){
+    for (int a=0;a<time_units;a++){
+      delete vt[a].m;
+    }
+  }
+  time_point get_start_time();
+  time_point get_stop_time();
   bool put(handle atom,time_point t,location *l=NULL);
   handle get(time_point t,location *l=NULL);
   time_interval_list get(handle atom,location l);
-  space_block_list get(handle atom,time_interval t);
-}
+  space_block_list get(handle atom,time_point t);
+  void getResOrigin(float& res,float& oX,float& oY,float& oZ){
+    res=space_res;oX=originX;oY=originY;oZ=originZ;
+  }
+
+};
+//API
 #endif
