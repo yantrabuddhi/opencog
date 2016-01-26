@@ -33,6 +33,7 @@ struct time_unit{
 //cicular buffer
 template <class handle>
 class time_circle{
+private:
   unsigned int num_time_unit;float time_res,space_res;//time resolution and space resolution
   float originX,originY,originZ;
 
@@ -59,7 +60,6 @@ public:
   time_t get_start_time();
   time_t get_stop_time();
   int get_time_unit(time_t);//-neg if out of circle
-  int get_next(int tt);//
 
   void get_res_origin(float& res,float& oX,float& oY,float& oZ){
     res=space_res;oX=originX;oY=originY;oZ=originZ;
@@ -71,6 +71,8 @@ public:
   bool get_atom(handle &h,time_t t,location l);
   void get_times(handle atom,time_t_list& t,location l);
   void get_locations(handle atom,time_t t,location_list& ll);
+  //bool save(std::string file);//resolve atom uuid
+  //bool load(std::string file);//
 };
 //API
 #endif
