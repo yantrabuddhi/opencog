@@ -41,8 +41,9 @@ namespace octomap {
     return out << '(' << c << ')';
   }
 */
-  typedef int Handle;
+
+  //typedef int Handle;
   template<>
-  TemplateOcTree<Handle>::StaticMemberInitializer TemplateOcTree<Handle>::templateOcTreeMemberInit;
+  TemplateOcTree<int>::StaticMemberInitializer TemplateOcTree<int>::templateOcTreeMemberInit;
 
 } // end namespace

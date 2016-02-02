@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
   cout << endl;
   cout << "generating example map" << endl;
 
-  TemplateOcTree<double> tree (0.1);  // create empty tree with resolution 0.1
+  TemplateOcTree<int> tree (0.1);  // create empty tree with resolution 0.1
 
 
   // insert some measurements of occupied cells
