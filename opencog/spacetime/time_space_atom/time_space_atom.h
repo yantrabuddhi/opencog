@@ -9,5 +9,7 @@
 #include <boost/circular_buffer.hpp>
 #include <list>
 #include <chrono>
+#include "TemplateOcTree.h"
+#include "TemplateOcTreeNode.h"
 
 #end
