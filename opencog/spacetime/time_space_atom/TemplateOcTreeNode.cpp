@@ -4,7 +4,8 @@ namespace octomap {
 
 
   // node implementation  --------------------------------------
-  std::ostream& TemplateOcTreeNode::writeValue (std::ostream &s) const {
+  template <class T>
+  std::ostream& TemplateOcTreeNode<T>::writeValue (std::ostream &s) const {
     // 1 bit for each children; 0: empty, 1: allocated
     std::bitset<8> children;
     for (unsigned int i=0; i<8; i++) {
@@ -23,8 +24,8 @@ namespace octomap {
       if (children[i] == 1) this->getChild(i)->writeValue(s);    
     return s;
   }
-
-  std::istream& TemplateOcTreeNode::readValue (std::istream &s) {
+  template <class T>
+  std::istream& TemplateOcTreeNode<T>::readValue (std::istream &s) {
     // read node data
     char children_char;
     s.read((char*) &value, sizeof(value)); // occupancy
@@ -42,8 +43,8 @@ namespace octomap {
     return s;
   }
   // pruning ============= is it needed?
-
-  bool TemplateOcTreeNode::pruneNode() {
+  template <class T>
+  bool TemplateOcTreeNode<T>::pruneNode() {
     // checks for equal occupancy only, dat ignored
     if (!this->collapsible()) return false;
     // set occupancy value 
@@ -58,8 +59,8 @@ namespace octomap {
     children = NULL;
     return true;
   }
-
-  void TemplateOcTreeNode::expandNode() {
+  template <class T>
+  void TemplateOcTreeNode<T>::expandNode() {
     assert(!hasChildren());
     for (unsigned int k=0; k<8; k++) {
       createChild(k);

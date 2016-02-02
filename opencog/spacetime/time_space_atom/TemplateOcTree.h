@@ -8,7 +8,7 @@
 namespace octomap {
   // tree definition
   template <class T>
-  class TemplateOcTree : public OccupancyOcTreeBase <TemplateOcTreeNode<T>> {
+  class TemplateOcTree : public OccupancyOcTreeBase < TemplateOcTreeNode<T> > {
 
   public:
     /// Default constructor, sets resolution of leafs
@@ -16,14 +16,14 @@ namespace octomap {
       
     /// virtual constructor: creates a new object of same type
     /// (Covariant return type requires an up-to-date compiler)
-    TemplateOcTree* create() const {return new TemplateOcTree(resolution); }
+    TemplateOcTree* create() const {return new TemplateOcTree(this->resolution); }//changed to this->resolution else templates cause problems
 
     std::string getTreeType() const {return "TemplateOcTree";}
    
     // set node dat at given key or coordinate. Replaces previous dat.
-    TemplateOcTreeNode* setNodeData(const OcTreeKey& key, const T& r);
+    TemplateOcTreeNode<T>* setNodeData(const OcTreeKey& key, const T& r);
 
-    TemplateOcTreeNode* setNodeData(const float& x, const float& y, 
+    TemplateOcTreeNode<T>* setNodeData(const float& x, const float& y, 
                                  const float& z, const T& r) {
       OcTreeKey key;
       if (!this->coordToKeyChecked(point3d(x,y,z), key)) return NULL;
@@ -43,6 +43,7 @@ namespace octomap {
      * files through the AbstractOcTree factory. You should also call
      * ensureLinking() once from the constructor.
      */
+     
     class StaticMemberInitializer{
        public:
          StaticMemberInitializer() {

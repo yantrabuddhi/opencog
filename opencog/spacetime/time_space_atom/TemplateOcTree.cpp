@@ -1,14 +1,16 @@
 #include "TemplateOcTree.h"
 namespace octomap {
   // tree implementation  --------------------------------------
-  TemplateOcTree::TemplateOcTree(double resolution)
-  : OccupancyOcTreeBase<TemplateOcTreeNode>(resolution) {
+  template <class T>
+  TemplateOcTree<T>::TemplateOcTree(double resolution)
+  : OccupancyOcTreeBase< TemplateOcTreeNode<T> >(resolution) {
     templateOcTreeMemberInit.ensureLinking();
   };
 
-  TemplateOcTreeNode* TemplateOcTree::setNodeData(const OcTreeKey& key, 
+  template <class T>
+  TemplateOcTreeNode<T>* TemplateOcTree<T>::setNodeData(const OcTreeKey& key, 
                                              const T& tDat){
-    TemplateOcTreeNode* n = search (key);
+    TemplateOcTreeNode<T> *n = this->search(key);
     if (n != 0) {
       n->setData(tDat);//setColor 
     }
@@ -39,7 +41,8 @@ namespace octomap {
     return out << '(' << c << ')';
   }
 */
-
-  TemplateOcTree::StaticMemberInitializer TemplateOcTree::colorOcTreeMemberInit;
+  typedef int Handle;
+  template<>
+  TemplateOcTree<Handle>::StaticMemberInitializer TemplateOcTree<Handle>::templateOcTreeMemberInit;
 
 } // end namespace
