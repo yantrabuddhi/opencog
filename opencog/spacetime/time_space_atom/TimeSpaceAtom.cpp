@@ -141,4 +141,15 @@ point3d_list TimeSpaceAtom::GetLocationsOfAtomOccurenceNow(const int map_handle,
 point3d_list TimeSpaceAtom::GetLocationsOfAtomOccurenceAtTime(const time_pt& time_p,const int map_handle,const Handle& ato)
 {
 	//
+	assert(created_once);
+	point3d_list pl;
+	auto it=std::find(std::begin(time_circle), std::end(time_circle), time_p);//time_circle.begin(),time_circle.end()
+	if (it==std::end(time_circle))return false;
+	assert(it->has_map(map_handle));//map handles not added dynamically, just during construction. assert in case user put wrong one
+	for(AtomOcTree::tree_iterator ita = it->map_tree[map_handle].begin_tree(),
+       end=it->map_tree[map_handle].end_tree(); ita!= end; ++ita){
+		//
+		if (ita->getData()==ato) pl.push_back(ita.getCoordinate());
+	}
+	return pl;	
 }
