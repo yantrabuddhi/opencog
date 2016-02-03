@@ -22,10 +22,9 @@ namespace octomap {
     // set node dat at given key or coordinate. Replaces previous dat.
     AtomOcTreeNode* setNodeData(const OcTreeKey& key, const Handle& r);
 
-    AtomOcTreeNode* setNodeData(const float& x, const float& y, 
-                                 const float& z, const Handle& r) {
+    AtomOcTreeNode* setNodeData(const point3d& xyz, const Handle& r) {
       OcTreeKey key;
-      if (!this->coordToKeyChecked(point3d(x,y,z), key)) return NULL;
+      if (!this->coordToKeyChecked(xyz, key)) return NULL;
       return setNodeData(key,r);
     }
     // update inner nodes, sets dat to average child dat

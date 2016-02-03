@@ -41,7 +41,7 @@ namespace octomap {
     }
     return s;
   }
-  // pruning ============= is it needed?
+  // pruning ============= mandeep: change dat here when pruned, depending on type of dat
   bool AtomOcTreeNode::pruneNode() {
     // checks for equal occupancy only, dat ignored
     if (!this->collapsible()) return false;
@@ -49,6 +49,7 @@ namespace octomap {
     setLogOdds(getChild(0)->getLogOdds());
     // set dat to average dat
     ////if (isColorSet()) dat = getAverageChildColor();//commented by mandeep
+    dat=0;
     // delete children
     for (unsigned int i=0;i<8;i++) {
       delete children[i];
