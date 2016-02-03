@@ -115,9 +115,30 @@ TimeList TimeSpaceAtom::GetTimesOfAtomOccurenceInMap(int map_handle,const Handle
 		for(AtomOcTree::tree_iterator it = tu.map_tree[map_handle].begin_tree(),
         end=tu.map_tree[map_handle].end_tree(); it!= end; ++it){
 			//
-			if (it->getData()==UndefinedHandle) found=true;
+			if (it->getData()==ato) found=true;
 		}
 		if (found) tl.push_back(tu.t);
 	});
 	return tl;
+}
+
+point3d_list TimeSpaceAtom::GetLocationsOfAtomOccurenceNow(const int map_handle,const Handle& ato)
+{
+	//
+	assert(created_once);
+	point3d_list pl;
+	int i=time_circle.capacity()-1;
+	if (time_circle.size()<time_circle.capacity()) i=time_circle.size()-1;
+	assert(time_circle[i].has_map(map_handle));
+	for(AtomOcTree::tree_iterator it = time_circle[i].map_tree[map_handle].begin_tree(),
+       end=time_circle[i].map_tree[map_handle].end_tree(); it!= end; ++it){
+		//
+		if (it->getData()==ato) pl.push_back(it.getCoordinate());
+	}
+	return pl;
+}
+
+point3d_list TimeSpaceAtom::GetLocationsOfAtomOccurenceAtTime(const time_pt& time_p,const int map_handle,const Handle& ato)
+{
+	//
 }
