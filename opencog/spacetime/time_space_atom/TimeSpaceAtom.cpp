@@ -79,7 +79,7 @@ bool TimeSpaceAtom::GetAtomAtTime(const time_pt& time_p,const int map_handle,con
 	//
 	assert(created_once);
 	//find time in time circle time unit
-	auto it=std::find(std::begin(time_circle), std::end(time_circle), time_p);
+	auto it=std::find(std::begin(time_circle), std::end(time_circle), time_p);//time_circle.begin(),time_circle.end()
 	if (it==std::end(time_circle))return false;
 	assert(it->has_map(map_handle));
 	OcTreeNode* result = it->map_tree[map_handle].search(location);
@@ -87,4 +87,35 @@ bool TimeSpaceAtom::GetAtomAtTime(const time_pt& time_p,const int map_handle,con
 	ato=(static_cast<AtomOcTreeNode*>(result))->getData();
 	if (ato==UndefinedHandle) return false;
 	return true;
+}
+
+TimeList TimeSpaceAtom::GetTimesOfAtomOccurenceAtLocation(const int map_handle,const point3d location,const Handle& ato)
+{
+	//
+	TimeList tl;
+	for_each(time_circle.begin(),time_circle.end(),[](auto tu){
+		if (!tu.has_map(map_handle)return;
+			OcTreeNode* result = tu.map_tree[map_handle].search(location);
+			if (result==NULL) return;
+			ato=(static_cast<AtomOcTreeNode*>(result))->getData();
+			if (ato==UndefinedHandle) return;
+			tl.push_back(tu.t)
+	});
+	return tl;
+}
+
+TimeList TimeSpaceAtom::GetTimesOfAtomOccurenceInMap(int map_handle,const Handle& ato)
+{
+	//
+	TimeList tl;
+	for_each(time_circle.begin(),time_circle.end(),[](auto tu){
+		if (!tu.has_map(map_handle)return;
+		//go through all nodes and leafs of octomap to search atom
+		for(AtomOcTree::tree_iterator it = tu.map_tree[map_handle].begin_tree(),
+        end=tu.map_tree[map_handle].end_tree(); it!= end; ++it){
+			//
+			if (it->getData()!=UndefinedHandle) tl.push_back(tu.t);
+		}
+	});
+	return tl;
 }
