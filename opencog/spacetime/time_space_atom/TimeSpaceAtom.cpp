@@ -6,7 +6,7 @@ TimeSpaceAtom::TimeSpaceAtom(unsigned int num_time_units,vector<float>map_res_me
 {
 	map_count=map_res_meters.size();//if zero throw exception
 	int i=0;
-	for_each(map_res_meters.begin(),map_res_meters.end(),[](auto resolution){i++;map_res[i]=resolution;});
+	for_each(map_res_meters.begin(),map_res_meters.end(),[&](auto resolution){i++;map_res[i]=resolution;});
 }
 
 unsigned int TimeSpaceAtom::GetMapCount()
@@ -18,7 +18,7 @@ bool TimeSpaceAtom::GetMapResolution(const int handle,float& res)
 {
 	auto it=map_res.find(handle);
 	if (it==map_res.end()) return false;
-	res=it->second();
+	res=it->second;
 	return true;	
 }
 
@@ -38,8 +38,8 @@ bool TimeSpaceAtom::CreateNewTimeUnit(const time_pt time_p,const duration_c dura
 			return false;
 	}
 	time_unit temp(time_p,duration);
-	for_each( map_res.begin(),map_res.end(),[](auto handle){
-		temp.map_tree[handle]=AtomOcTree(map_res[handle]);
+	for_each( map_res.begin(),map_res.end(),[&](auto handle){
+		temp.map_tree[handle.first]=AtomOcTree(map_res[handle.second]);
 		}
 	);
 	time_circle.push_back(temp);
@@ -47,7 +47,7 @@ bool TimeSpaceAtom::CreateNewTimeUnit(const time_pt time_p,const duration_c dura
 	return true;
 }
 
-bool TimeSpaceAtom::PutAtomAtCurrentTime(const int map_handle,const point3d location,const Handle& ato)
+bool TimeSpaceAtom::PutAtomAtCurrentTime(const int map_handle,const point3d location,const aHandle& ato)
 {
 	//if (!created_once)return false;
 	assert(created_once);
@@ -60,7 +60,7 @@ bool TimeSpaceAtom::PutAtomAtCurrentTime(const int map_handle,const point3d loca
 	return true;
 }
 
-bool TimeSpaceAtom::GetAtomCurrentTime(const int map_handle,const point3d location,Handle& ato)
+bool TimeSpaceAtom::GetAtomCurrentTime(const int map_handle,const point3d location,aHandle& ato)
 {
 	//
 	assert(created_once);
@@ -74,7 +74,7 @@ bool TimeSpaceAtom::GetAtomCurrentTime(const int map_handle,const point3d locati
 	return true;
 }
 
-bool TimeSpaceAtom::GetAtomAtTime(const time_pt& time_p,const int map_handle,const point3d location,Handle& ato)
+bool TimeSpaceAtom::GetAtomAtTime(const time_pt& time_p,const int map_handle,const point3d location,aHandle& ato)
 {
 	//
 	assert(created_once);
@@ -89,27 +89,27 @@ bool TimeSpaceAtom::GetAtomAtTime(const time_pt& time_p,const int map_handle,con
 	return true;
 }
 
-TimeList TimeSpaceAtom::GetTimesOfAtomOccurenceAtLocation(const int map_handle,const point3d location,const Handle& ato)
+TimeList TimeSpaceAtom::GetTimesOfAtomOccurenceAtLocation(const int map_handle,const point3d location,const aHandle& ato)
 {
 	//
 	TimeList tl;
-	for_each(time_circle.begin(),time_circle.end(),[](auto tu){
-		if (!tu.has_map(map_handle)return;
+	for_each(time_circle.begin(),time_circle.end(),[&](auto tu){
+		if (!tu.has_map(map_handle))return;
 			OcTreeNode* result = tu.map_tree[map_handle].search(location);
 			if (result==NULL) return;
-			ato=(static_cast<AtomOcTreeNode*>(result))->getData();
-			if (ato==UndefinedHandle) return;
-			tl.push_back(tu.t)
+			aHandle ato_t=(static_cast<AtomOcTreeNode*>(result))->getData();
+			if (ato_t!=ato) return;
+			tl.push_back(tu.t);
 	});
 	return tl;
 }
 
-TimeList TimeSpaceAtom::GetTimesOfAtomOccurenceInMap(int map_handle,const Handle& ato)
+TimeList TimeSpaceAtom::GetTimesOfAtomOccurenceInMap(int map_handle,const aHandle& ato)
 {
 	//
 	TimeList tl;
-	for_each(time_circle.begin(),time_circle.end(),[](auto tu){
-		if (!tu.has_map(map_handle)return;
+	for_each(time_circle.begin(),time_circle.end(),[&](auto tu){
+		if (!tu.has_map(map_handle))return;
 		bool found=false;
 		//go through all nodes and leafs of octomap to search atom
 		for(AtomOcTree::tree_iterator it = tu.map_tree[map_handle].begin_tree(),
@@ -122,7 +122,7 @@ TimeList TimeSpaceAtom::GetTimesOfAtomOccurenceInMap(int map_handle,const Handle
 	return tl;
 }
 
-point3d_list TimeSpaceAtom::GetLocationsOfAtomOccurenceNow(const int map_handle,const Handle& ato)
+point3d_list TimeSpaceAtom::GetLocationsOfAtomOccurenceNow(const int map_handle,const aHandle& ato)
 {
 	//
 	assert(created_once);
@@ -138,13 +138,13 @@ point3d_list TimeSpaceAtom::GetLocationsOfAtomOccurenceNow(const int map_handle,
 	return pl;
 }
 
-point3d_list TimeSpaceAtom::GetLocationsOfAtomOccurenceAtTime(const time_pt& time_p,const int map_handle,const Handle& ato)
+point3d_list TimeSpaceAtom::GetLocationsOfAtomOccurenceAtTime(const time_pt& time_p,const int map_handle,const aHandle& ato)
 {
 	//
 	assert(created_once);
 	point3d_list pl;
 	auto it=std::find(std::begin(time_circle), std::end(time_circle), time_p);//time_circle.begin(),time_circle.end()
-	if (it==std::end(time_circle))return false;
+	if (it==std::end(time_circle))return point3d_list();
 	assert(it->has_map(map_handle));//map handles not added dynamically, just during construction. assert in case user put wrong one
 	for(AtomOcTree::tree_iterator ita = it->map_tree[map_handle].begin_tree(),
        end=it->map_tree[map_handle].end_tree(); ita!= end; ++ita){

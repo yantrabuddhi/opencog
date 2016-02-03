@@ -27,7 +27,7 @@ typedef list<time_pt> TimeList;
 struct time_unit{
 	time_pt t; duration_c duration;
 	map<int,AtomOcTree> map_tree;
-	time_unit(time_pt tp,duration_c d):t(tP),duration(d){}
+	time_unit(time_pt tp,duration_c d):t(tp),duration(d){}
 	bool operator==(time_pt tp){
 		return (tp>=t && tp<=t+duration);
 	}
@@ -42,18 +42,19 @@ class TimeSpaceAtom{
 	public:
 	//API
 	unsigned int GetMapCount();
+	bool GetMapResolution(const int handle,float& res);
 	bool GetCurrentTimeRange(time_pt& time_p,duration_c& duration);
-	bool IsTimePointInRange(time_pt& time_to_check,time_pt& t,duration_c& duration){
+	bool IsTimePointInRange(const time_pt& time_to_check,const time_pt& t,const duration_c& duration){
 		return (time_to_check>=t && time_to_check<=t+duration);
 	}
 	bool CreateNewTimeUnit(const time_pt time_p,const duration_c duration);
-	bool PutAtomAtCurrentTime(const int map_handle,const point3d location,const Handle& ato);
-	bool GetAtomCurrentTime(const int map_handle,const point3d location,Handle& ato);
-	bool GetAtomAtTime(const time_pt& time_p,const int map_handle,const point3d location,Handle& ato);
-	TimeList GetTimesOfAtomOccurenceAtLocation(const int map_handle,const point3d location,const Handle& ato);
-	TimeList GetTimesOfAtomOccurenceInMap(int map_handle,const Handle& ato);
-	point3d_list GetLocationsOfAtomOccurenceNow(const int map_handle,const Handle& ato);
-	point3d_list GetLocationsOfAtomOccurenceAtTime(const time_pt& time_p,const int map_handle,const Handle& ato);
+	bool PutAtomAtCurrentTime(const int map_handle,const point3d location,const aHandle& ato);
+	bool GetAtomCurrentTime(const int map_handle,const point3d location,aHandle& ato);
+	bool GetAtomAtTime(const time_pt& time_p,const int map_handle,const point3d location,aHandle& ato);
+	TimeList GetTimesOfAtomOccurenceAtLocation(const int map_handle,const point3d location,const aHandle& ato);
+	TimeList GetTimesOfAtomOccurenceInMap(int map_handle,const aHandle& ato);
+	point3d_list GetLocationsOfAtomOccurenceNow(const int map_handle,const aHandle& ato);
+	point3d_list GetLocationsOfAtomOccurenceAtTime(const time_pt& time_p,const int map_handle,const aHandle& ato);
 	//AtomList& GetAtomsInLocationBBXatTime();//BBX = bounding box
 	
 	public:
@@ -67,4 +68,4 @@ class TimeSpaceAtom{
 	time_pt curr_time;duration_c curr_duration;
 	bool created_once;
 };
-#end
+#endif

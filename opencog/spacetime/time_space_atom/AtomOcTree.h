@@ -10,8 +10,14 @@ namespace octomap {
   class AtomOcTree : public OccupancyOcTreeBase < AtomOcTreeNode > {
 
   public:
+    
     /// Default constructor, sets resolution of leafs
-    AtomOcTree(double resolution);
+    AtomOcTree(double resolution=0.1);
+    
+    //AtomOcTree(const AtomOcTree& rhs){setResolution(rhs.getResolution());}
+    void operator=(const AtomOcTree& rhs) {setResolution(rhs.getResolution());}
+		
+	
       
     /// virtual constructor: creates a new object of same type
     /// (Covariant return type requires an up-to-date compiler)
