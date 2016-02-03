@@ -39,12 +39,24 @@ bool TimeSpaceAtom::CreateNewTimeUnit(const time_pt time_p,const duration_c dura
 			return false;
 	}
 	}
+	
 	time_unit temp(time_p,duration);
+	/*
 	for_each( map_res.begin(),map_res.end(),[&](auto handle){
 		temp.map_tree[handle.first]=AtomOcTree(map_res[handle.second]);
 		}
 	);
+	*/
 	time_circle.push_back(temp);
+	int i=time_circle.capacity()-1;
+	if (time_circle.size()<time_circle.capacity()) i=time_circle.size()-1;
+	for_each( map_res.begin(),map_res.end(),[&](auto handle){
+		time_circle[i].map_tree[handle.first]=AtomOcTree(handle.second);
+		}
+	);
+	
+	curr_time=time_p;
+	curr_duration=duration;
 	created_once=true;
 	return true;
 }
@@ -70,7 +82,7 @@ bool TimeSpaceAtom::GetAtomCurrentTime(const int map_handle,const point3d locati
 	if (time_circle.size()<time_circle.capacity()) i=time_circle.size()-1;
 	assert(time_circle[i].has_map(map_handle));
 	OcTreeNode* result = time_circle[i].map_tree[map_handle].search(location);
-	if (result==NULL) return false;
+	if (result==NULL) {ato=UndefinedHandle;return false;}
 	ato=(static_cast<AtomOcTreeNode*>(result))->getData();
 	if (ato==UndefinedHandle) return false;
 	return true;
@@ -85,7 +97,7 @@ bool TimeSpaceAtom::GetAtomAtTime(const time_pt& time_p,const int map_handle,con
 	if (it==std::end(time_circle))return false;
 	assert(it->has_map(map_handle));
 	OcTreeNode* result = it->map_tree[map_handle].search(location);
-	if (result==NULL) return false;
+	if (result==NULL) {ato=UndefinedHandle;return false;}
 	ato=(static_cast<AtomOcTreeNode*>(result))->getData();
 	if (ato==UndefinedHandle) return false;
 	return true;

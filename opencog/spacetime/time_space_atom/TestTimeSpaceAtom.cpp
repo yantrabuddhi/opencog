@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
   cout << endl;
   cout << "generating example map" << endl;
 
-  double hi[4]={0.2,0.3,0.4,0.5};
+  double hi[4]={0.1,0.1,0.1,0.1};//0.2 failed
   vector<double> res(hi,hi+4);
   TimeSpaceAtom tsa(3,res);  // create empty tree with resolution 0.1
   time_pt t1=std::chrono::system_clock::now();
@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
   tsa.GetAtomCurrentTime(1,query,result);
   print_query_info(query, result);
 
-  query = point3d(1.,1.,1.);
+  query = point3d(100.,1.,1.);
   tsa.GetAtomCurrentTime(1,query,result);
   print_query_info(query, result);
 
