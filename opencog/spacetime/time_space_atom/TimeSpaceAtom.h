@@ -42,7 +42,7 @@ class TimeSpaceAtom{
 	public:
 	//API
 	unsigned int GetMapCount();
-	bool GetMapResolution(const int handle,float& res);
+	bool GetMapResolution(const int handle,double& res);
 	bool GetCurrentTimeRange(time_pt& time_p,duration_c& duration);
 	bool IsTimePointInRange(const time_pt& time_to_check,const time_pt& t,const duration_c& duration){
 		return (time_to_check>=t && time_to_check<=t+duration);
@@ -59,11 +59,11 @@ class TimeSpaceAtom{
 	
 	public:
 	//constructor
-	TimeSpaceAtom(unsigned int num_time_units,vector<float>map_res_meters);
+	TimeSpaceAtom(unsigned int num_time_units,vector<double>map_res_meters);
 	private:
 	unsigned int map_count;
 	//each map may have translation rotation (orientation) co-ordinates managed by user
-	map<int,float>map_res;//resolution of maps
+	map<int,double>map_res;//resolution of maps
 	boost::circular_buffer<time_unit> time_circle;
 	time_pt curr_time;duration_c curr_duration;
 	bool created_once;

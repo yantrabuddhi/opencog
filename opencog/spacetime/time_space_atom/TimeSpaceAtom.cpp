@@ -2,7 +2,7 @@
 #include "TimeSpaceAtom.h"
 #include <assert.h>
 
-TimeSpaceAtom::TimeSpaceAtom(unsigned int num_time_units,vector<float>map_res_meters):time_circle(num_time_units),created_once(false)
+TimeSpaceAtom::TimeSpaceAtom(unsigned int num_time_units,vector<double>map_res_meters):time_circle(num_time_units),created_once(false)
 {
 	map_count=map_res_meters.size();//if zero throw exception
 	int i=0;
@@ -14,7 +14,7 @@ unsigned int TimeSpaceAtom::GetMapCount()
 	return map_count;
 }
 
-bool TimeSpaceAtom::GetMapResolution(const int handle,float& res)
+bool TimeSpaceAtom::GetMapResolution(const int handle,double& res)
 {
 	auto it=map_res.find(handle);
 	if (it==map_res.end()) return false;
@@ -33,9 +33,11 @@ bool TimeSpaceAtom::GetCurrentTimeRange(time_pt& time_p,duration_c& duration)
 bool TimeSpaceAtom::CreateNewTimeUnit(const time_pt time_p,const duration_c duration)
 {
 	//ideally greater than check should be done
+	if (created_once){
 	if (IsTimePointInRange(time_p,curr_time,curr_duration) ||
 	    IsTimePointInRange(time_p+duration,curr_time,curr_duration)){
 			return false;
+	}
 	}
 	time_unit temp(time_p,duration);
 	for_each( map_res.begin(),map_res.end(),[&](auto handle){
