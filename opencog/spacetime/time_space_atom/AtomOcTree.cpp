@@ -7,7 +7,7 @@ namespace octomap {
   }
 
   AtomOcTreeNode* AtomOcTree::setNodeData(const OcTreeKey& key, 
-                                             const Handle& r){
+                                             const aHandle& r){
     AtomOcTreeNode *n = search(key);
     if (n != 0) {
       n->setData(r);//setColor 
@@ -37,12 +37,12 @@ namespace octomap {
     }
   }
 
-  std::ostream& operator<<(std::ostream& out, Handle const& c) {
+  std::ostream& operator<<(std::ostream& out, aHandle const& c) {
     return out << '(' << c << ')';
   }
 */
 
-  //typedef int Handle;
+  //typedef int aHandle;
   AtomOcTree::StaticMemberInitializer AtomOcTree::atomOcTreeMemberInit;
 
 } // end namespace

@@ -20,9 +20,9 @@ namespace octomap {
     std::string getTreeType() const {return "AtomOcTree";}
    
     // set node dat at given key or coordinate. Replaces previous dat.
-    AtomOcTreeNode* setNodeData(const OcTreeKey& key, const Handle& r);
+    AtomOcTreeNode* setNodeData(const OcTreeKey& key, const aHandle& r);
 
-    AtomOcTreeNode* setNodeData(const point3d& xyz, const Handle& r) {
+    AtomOcTreeNode* setNodeData(const point3d& xyz, const aHandle& r) {
       OcTreeKey key;
       if (!this->coordToKeyChecked(xyz, key)) return NULL;
       return setNodeData(key,r);
@@ -63,7 +63,7 @@ namespace octomap {
 
   //! user friendly output in format (r g b)
   //std::ostream& operator<<(std::ostream& out, AtomOcTreeNode::T const& c);
-  ////std::ostream& operator<<(std::ostream& out, Handle const& c);
+  ////std::ostream& operator<<(std::ostream& out, aHandle const& c);
 
 } // end namespace
 

@@ -5,11 +5,11 @@
 #include <octomap/OcTreeNode.h>
 
 namespace octomap {
-  typedef int Handle;
+  typedef int aHandle;
   // node definition
   class AtomOcTreeNode : public OcTreeNode {    
   public:
-    AtomOcTreeNode() : OcTreeNode() {}
+    AtomOcTreeNode() : OcTreeNode(),dat(0) {} //dat gets default value from prunning
 
     AtomOcTreeNode(const AtomOcTreeNode& rhs) : OcTreeNode(rhs), dat(rhs.dat) {}
 
@@ -34,17 +34,17 @@ namespace octomap {
     bool pruneNode();
     void expandNode();
     
-    inline Handle getData() const { return dat; }
-    inline void  setData(Handle c) {this->dat = c; }
+    inline aHandle getData() const { return dat; }
+    inline void  setData(aHandle c) {this->dat = c; }
 
-    Handle& getData() { return dat; }
+    aHandle& getData() { return dat; }
 
     // file I/O
     std::istream& readValue (std::istream &s);
     std::ostream& writeValue(std::ostream &s) const;
     
   protected:
-    Handle dat;
+    aHandle dat;
   };
 
 } // end namespace

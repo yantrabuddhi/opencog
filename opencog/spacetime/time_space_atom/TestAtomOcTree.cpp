@@ -12,7 +12,7 @@ using namespace octomap;
 void print_query_info(point3d query, OcTreeNode* node) {
   if (node != NULL) {
 	  int i=(static_cast<AtomOcTreeNode*>(node))->getData();
-    cout << "occupancy probability at " << query << ":\t " << node->getOccupancy() << ";\t"<<i<< endl;
+    cout << "occupancy probability at " << query << ":\t " << node->getOccupancy() << ";\t "<<i<< endl;
   }
   else 
     cout << "occupancy probability at " << query << ":\t is unknown" << endl;    
@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
       for (int z=-20; z<20; z++) {
         point3d endpoint ((float) x*0.05f, (float) y*0.05f, (float) z*0.05f);
         tree.updateNode(endpoint, true); // integrate 'occupied' measurement
-        tree.setNodeData(endpoint, 21);
+        tree.setNodeData(endpoint, 21);//if omitted prune value of 0 is assigned?
       }
     }
   }
