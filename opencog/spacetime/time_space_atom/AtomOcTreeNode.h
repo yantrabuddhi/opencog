@@ -6,6 +6,7 @@
 
 namespace octomap {
   typedef int aHandle;
+  const aHandle UndefinedHandle=0;
   // node definition
   class AtomOcTreeNode : public OcTreeNode {    
   public:

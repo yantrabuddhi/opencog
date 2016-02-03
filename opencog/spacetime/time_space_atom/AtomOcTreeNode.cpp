@@ -49,7 +49,7 @@ namespace octomap {
     setLogOdds(getChild(0)->getLogOdds());
     // set dat to average dat
     ////if (isColorSet()) dat = getAverageChildColor();//commented by mandeep
-    dat=0;
+    dat=UndefinedHandle;
     // delete children
     for (unsigned int i=0;i<8;i++) {
       delete children[i];

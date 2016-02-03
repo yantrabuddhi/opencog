@@ -54,8 +54,22 @@ bool TimeSpaceAtom::PutAtomAtCurrentTime(const int map_handle,const point3d loca
 	int i=time_circle.capacity()-1;
 	if (time_circle.size()<time_circle.capacity()) i=time_circle.size()-1;
 	//if (!time_circle[i].has_map(handle)) return false;//may assert too
-	assert(time_circle[i].has_map(handle));
-	time_circle[i].map_tree[handle].updateNode(location,true);
-	time_circle[i].map_tree[handle].setNodeData(location,ato);
+	assert(time_circle[i].has_map(map_handle));
+	time_circle[i].map_tree[map_handle].updateNode(location,true);
+	time_circle[i].map_tree[map_handle].setNodeData(location,ato);
+	return true;
+}
+
+bool TimeSpaceAtom::GetAtomCurrentTime(const int map_handle,const point3d location,Handle& ato)
+{
+	//
+	assert(created_once);
+	int i=time_circle.capacity()-1;
+	if (time_circle.size()<time_circle.capacity()) i=time_circle.size()-1;
+	assert(time_circle[i].has_map(map_handle));
+	OcTreeNode* result = time_circle[i].map_tree[map_handle].search(location);
+	if (result==NULL) return false;
+	ato=(static_cast<AtomOcTreeNode*>(result))->getData();
+	if (ato==UndefinedHandle) return false;
 	return true;
 }
