@@ -10,10 +10,9 @@ using namespace std;
 using namespace octomap;
 
 
-void print_query_info(point3d query, OcTreeNode* node) {
-  if (node != NULL) {
-	  int i=(static_cast<AtomOcTreeNode*>(node))->getData();
-    cout << "occupancy probability at " << query << ":\t " << node->getOccupancy() << ";\t "<<i<< endl;
+void print_query_info(point3d query, aHandle ato) {
+  if (ato != UndefinedHandle) {
+    cout << "occupancy probability at " << query << ":\t " << ato<< endl;
   }
   else 
     cout << "occupancy probability at " << query << ":\t is unknown" << endl;    
@@ -55,22 +54,23 @@ int main(int argc, char** argv) {
       }
     }
   }
-
+*/
   cout << endl;
   cout << "performing some queries:" << endl;
   
+  aHandle result;
   point3d query (0., 0., 0.);
-  OcTreeNode* result = tree.search (query);
+  tsa.GetAtomCurrentTime(1,query,result);
   print_query_info(query, result);
 
   query = point3d(-1.,-1.,-1.);
-  result = tree.search (query);
+  tsa.GetAtomCurrentTime(1,query,result);
   print_query_info(query, result);
 
   query = point3d(1.,1.,1.);
-  result = tree.search (query);
+  tsa.GetAtomCurrentTime(1,query,result);
   print_query_info(query, result);
-*/
+
 
   cout << endl;
   /*
