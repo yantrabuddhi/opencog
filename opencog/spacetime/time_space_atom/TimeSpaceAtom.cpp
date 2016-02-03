@@ -73,3 +73,18 @@ bool TimeSpaceAtom::GetAtomCurrentTime(const int map_handle,const point3d locati
 	if (ato==UndefinedHandle) return false;
 	return true;
 }
+
+bool TimeSpaceAtom::GetAtomAtTime(const time_pt& time_p,const int map_handle,const point3d location,Handle& ato)
+{
+	//
+	assert(created_once);
+	//find time in time circle time unit
+	auto it=std::find(std::begin(time_circle), std::end(time_circle), time_p);
+	if (it==std::end(time_circle))return false;
+	assert(it->has_map(map_handle));
+	OcTreeNode* result = it->map_tree[map_handle].search(location);
+	if (result==NULL) return false;
+	ato=(static_cast<AtomOcTreeNode*>(result))->getData();
+	if (ato==UndefinedHandle) return false;
+	return true;
+}
