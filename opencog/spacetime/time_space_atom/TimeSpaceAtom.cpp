@@ -110,12 +110,14 @@ TimeList TimeSpaceAtom::GetTimesOfAtomOccurenceInMap(int map_handle,const Handle
 	TimeList tl;
 	for_each(time_circle.begin(),time_circle.end(),[](auto tu){
 		if (!tu.has_map(map_handle)return;
+		bool found=false;
 		//go through all nodes and leafs of octomap to search atom
 		for(AtomOcTree::tree_iterator it = tu.map_tree[map_handle].begin_tree(),
         end=tu.map_tree[map_handle].end_tree(); it!= end; ++it){
 			//
-			if (it->getData()!=UndefinedHandle) tl.push_back(tu.t);
+			if (it->getData()==UndefinedHandle) found=true;
 		}
+		if (found) tl.push_back(tu.t);
 	});
 	return tl;
 }
