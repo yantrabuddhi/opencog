@@ -12,10 +12,11 @@ namespace octomap {
   public:
     
     /// Default constructor, sets resolution of leafs
-    AtomOcTree(double resolution=0.1);
+    AtomOcTree(double resolution=0.1);//does not work without optional resolution
     
+    //AtomOcTree(const AtomOcTree&)=default;
     //AtomOcTree(const AtomOcTree& rhs){setResolution(rhs.getResolution());}
-    void operator=(const AtomOcTree& rhs) {setResolution(rhs.getResolution());}
+    void operator=(const AtomOcTree& rhs) {setResolution(rhs.getResolution());}//do not use = to assign this class anywhere but initialization
 		
 	
       
