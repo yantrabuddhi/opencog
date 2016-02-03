@@ -1,20 +1,17 @@
 //TimeSpaceAtom.cpp
 #include "TimeSpaceAtom.h"
+#include <assert.h>
 
-int TimeSpaceAtom::AddMap(const string& name,float resolution_meters)
+TimeSpaceAtom::TimeSpaceAtom(unsigned int num_time_units,vector<float>map_res_meters):time_circle(num_time_units),created_once(false)
 {
-	map_count++;
-	map_name[name]=map_count;
-	map_res[map_count]=resolution_meters;
-	return map_count;
+	map_count=map_res_meters.size();//if zero throw exception
+	int i=0;
+	for_each(map_res_meters.begin(),map_res_meters.end(),[](auto resolution){i++;map_res[i]=resolution;});
 }
 
-bool TimeSpaceAtom::GetMapHandleFromName(const string& name,int& handle)
+unsigned int TimeSpaceAtom::GetMapCount()
 {
-	auto it=map_name.find(name);
-	if (it==map_name.end()) return false;
-	handle=it->second();
-	return true;
+	return map_count;
 }
 
 bool TimeSpaceAtom::GetMapResolution(const int handle,float& res)
@@ -35,15 +32,30 @@ bool TimeSpaceAtom::GetCurrentTimeRange(time_pt& time_p,duration_c& duration)
 
 bool TimeSpaceAtom::CreateNewTimeUnit(const time_pt time_p,const duration_c duration)
 {
+	//ideally greater than check should be done
 	if (IsTimePointInRange(time_p,curr_time,curr_duration) ||
 	    IsTimePointInRange(time_p+duration,curr_time,curr_duration)){
 			return false;
 	}
 	time_unit temp(time_p,duration);
-	for_each( map_name.begin(),map_name.end(),[](auto name){
-		int handle;GetMapHandleFromName(name,handle);temp.map_tree[handle]=AtomOcTree(map_res[handle]);
+	for_each( map_res.begin(),map_res.end(),[](auto handle){
+		temp.map_tree[handle]=AtomOcTree(map_res[handle]);
 		}
 	);
-	
-		
+	time_circle.push_back(temp);
+	created_once=true;
+	return true;
+}
+
+bool TimeSpaceAtom::PutAtomAtCurrentTime(const int map_handle,const point3d location,const Handle& ato)
+{
+	//if (!created_once)return false;
+	assert(created_once);
+	int i=time_circle.capacity()-1;
+	if (time_circle.size()<time_circle.capacity()) i=time_circle.size()-1;
+	//if (!time_circle[i].has_map(handle)) return false;//may assert too
+	assert(time_circle[i].has_map(handle));
+	time_circle[i].map_tree[handle].updateNode(location,true);
+	time_circle[i].map_tree[handle].setNodeData(location,ato);
+	return true;
 }

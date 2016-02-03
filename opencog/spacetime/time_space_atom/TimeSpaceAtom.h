@@ -41,16 +41,13 @@ struct time_unit{
 class TimeSpaceAtom{
 	public:
 	//API
-	int AddMap(const string& name,float resolution_meters);//returns map handle
-	bool GetMapHandleFromName(const string& name,int& handle);
-	bool GetMapResolution(const int handle,float& res);
-	//bool GetMapNameFromHandle(const int handle,string& name);//seems unlikely to be required
+	unsigned int GetMapCount();
 	bool GetCurrentTimeRange(time_pt& time_p,duration_c& duration);
-	bool IsTimePointInRange(time_pt time_to_check,time_pt& t,duration_c& duration){
+	bool IsTimePointInRange(time_pt& time_to_check,time_pt& t,duration_c& duration){
 		return (time_to_check>=t && time_to_check<=t+duration);
 	}
 	bool CreateNewTimeUnit(const time_pt time_p,const duration_c duration);
-	int PutAtomAtCurrentTime(const int map_handle,const point3d location,const Handle& ato);
+	bool PutAtomAtCurrentTime(const int map_handle,const point3d location,const Handle& ato);
 	bool GetAtomCurrentTime(const int map_handle,const point3d location,Handle& ato);
 	bool GetAtomAtTime(const time_pt& time_p,const int map_handle,const point3d location,Handle& ato);
 	TimeList GetTimesOfAtomOccurenceAtLocation(const int map_handle,const point3d location,const Handle& ato);
@@ -61,12 +58,13 @@ class TimeSpaceAtom{
 	
 	public:
 	//constructor
-	TimeSpaceAtom(unsigned int num_time_units):map_count(0),time_circle(num_time_units){}
+	TimeSpaceAtom(unsigned int num_time_units,vector<float>map_res_meters);
 	private:
-	int map_count;
-	map<string,int>map_name;//each map may have translation rotation (orientation) co-ordinates managed by user
+	unsigned int map_count;
+	//each map may have translation rotation (orientation) co-ordinates managed by user
 	map<int,float>map_res;//resolution of maps
 	boost::circular_buffer<time_unit> time_circle;
 	time_pt curr_time;duration_c curr_duration;
+	bool created_once;
 };
 #end
