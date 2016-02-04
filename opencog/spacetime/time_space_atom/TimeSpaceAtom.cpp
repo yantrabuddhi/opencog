@@ -82,6 +82,7 @@ bool TimeSpaceAtom::RemoveAtomAtCurrentTime(const int map_handle,const point3d l
 	int i=time_circle.capacity()-1;
 	if (time_circle.size()<time_circle.capacity()) i=time_circle.size()-1;
 	assert(time_circle[i].has_map(map_handle));
+	time_circle[i].map_tree[map_handle].setNodeData(location,UndefinedHandle);
 	time_circle[i].map_tree[map_handle].updateNode(location,false);
 	//time_circle[i].map_tree[map_handle].setNodeData(location,ato);
 	return true;
@@ -93,6 +94,7 @@ bool TimeSpaceAtom::RemoveAtomAtTime(time_pt tp,const int map_handle,const point
 	auto it=std::find(std::begin(time_circle), std::end(time_circle), tp);//time_circle.begin(),time_circle.end()
 	if (it==std::end(time_circle))return false;
 	assert(it->has_map(map_handle));
+	it->map_tree[map_handle].setNodeData(location,UndefinedHandle);
 	it->map_tree[map_handle].updateNode(location,false);
 	//time_circle[i].map_tree[map_handle].setNodeData(location,ato);
 	return true;
@@ -231,14 +233,14 @@ point3d_list TimeSpaceAtom::GetLocationsOfAtomOccurenceAtTime(const time_pt& tim
 void TimeSpaceAtom::RemoveAtom(const aHandle& ato)
 {
 	//remove all occurences of atom in all maps at all times
-	//point3d_list pl;
+	point3d_list pl;
 	for(auto tu=std::begin(time_circle), end=std::end(time_circle);(tu!=end);tu++){
 		for(auto it1=std::begin(tu->map_tree),endit1=std::end(tu->map_tree);it1!=endit1;it1++){
-			//pl.clear();
+			pl.clear();
 			for(AtomOcTree::tree_iterator it2 = it1->second.begin_tree(),
 			endit2=it1->second.end_tree(); it2!= endit2; ++it2){
 				if (it2->getData()==ato) {
-					//pl.push_back(it2.getCoordinate());
+					pl.push_back(it2.getCoordinate());
 					it2->setData(UndefinedHandle);
 				/*
 					if (it2->hasChildren()){
@@ -262,15 +264,15 @@ void TimeSpaceAtom::RemoveAtom(const aHandle& ato)
 				tu->map_tree[it1->first].updateNode(pp,false);
 			};
 			*/
-		/*	
-			cout<<"remove size="<<pl.size()<<endl;
+			
+			//cout<<"remove size="<<pl.size()<<endl;
 			for(auto it3=std::begin(pl),endit3=std::end(pl);it3!=endit3;it3++){
 				//RemoveAtomAtTime(tu->t,it1->first,*it3);
 				//cout<<*it3<<endl;
-				//it1->second.updateNode(*it3,false);
+				it1->second.updateNode(*it3,false);
 				//tu->map_tree[it1->first].updateNode(*it3,false);
 			};
-			*/
+			
 		};
 	};
 }

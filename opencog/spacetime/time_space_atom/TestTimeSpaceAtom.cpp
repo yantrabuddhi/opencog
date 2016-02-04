@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
   cout << "performing some queries:" << endl;
   aHandle result;
   point3d query (0., 0., 0.);
-tsa.RemoveAtomAtCurrentTime(1,query);  
+//tsa.RemoveAtomAtCurrentTime(1,query);  
   tsa.GetAtomCurrentTime(1,query,result);
   print_query_info(query, result);
 
@@ -99,16 +99,29 @@ tsa.RemoveAtomAtCurrentTime(1,query);
   cout<<"get locations at current time:";
   point3d_list pl=tsa.GetLocationsOfAtomOccurenceNow(1,21);
   cout<<pl.size()<<endl;
-
+/*
   cout<<"get locations at time:";
   pl=tsa.GetLocationsOfAtomOccurenceAtTime(t1,1,21);
   cout<<pl.size()<<endl;
-
+*/
   cout<<"removing atom=21"<<endl;
   tsa.RemoveAtom(21);
   query = point3d(0., 0., 0.);
   tsa.GetAtomCurrentTime(1,query,result);
   print_query_info(query, result);
+  
+  cout<<"get locations at time:";
+  pl=tsa.GetLocationsOfAtomOccurenceAtTime(t1,1,21);
+  cout<<pl.size()<<endl;
+
+  cout<<"adding units.."<<endl;
+  tsa.CreateNewTimeUnit(t1+dd,dd);
+  tsa.CreateNewTimeUnit(t1+dd+dd,dd);
+  tsa.CreateNewTimeUnit(t1+dd+dd+dd,dd);
+  
+  cout<<"get locations at time:";
+  pl=tsa.GetLocationsOfAtomOccurenceAtTime(t1,1,21);
+  cout<<pl.size()<<endl;
 /*
   cout<<"removing atom=21"<<endl;
   tsa.RemoveAtom(21);
