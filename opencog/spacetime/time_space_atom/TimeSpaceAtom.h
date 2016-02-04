@@ -49,6 +49,9 @@ class TimeSpaceAtom{
 	}
 	bool CreateNewTimeUnit(const time_pt time_p,const duration_c duration);
 	bool PutAtomAtCurrentTime(const int map_handle,const point3d location,const aHandle& ato);
+	bool RemoveAtomAtCurrentTime(const int map_handle,const point3d location);
+	bool RemoveAtomAtTime(time_pt tp,const int map_handle,const point3d location);
+	void RemoveAtom(const aHandle& ato);
 	bool GetAtomCurrentTime(const int map_handle,const point3d location,aHandle& ato);
 	bool GetAtomAtTime(const time_pt& time_p,const int map_handle,const point3d location,aHandle& ato);
 	TimeList GetTimesOfAtomOccurenceAtLocation(const int map_handle,const point3d location,const aHandle& ato);

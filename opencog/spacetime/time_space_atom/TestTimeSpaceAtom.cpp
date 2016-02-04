@@ -43,23 +43,35 @@ int main(int argc, char** argv) {
       }
     }
   }
-
-  // insert some measurements of free cells
-/* Need to put something to delete atom
-  for (int x=-30; x<30; x++) {
-    for (int y=-30; y<30; y++) {
-      for (int z=-30; z<30; z++) {
-        point3d endpoint ((float) x*0.02f-1.0f, (float) y*0.02f-1.0f, (float) z*0.02f-1.0f);
-        tree.updateNode(endpoint, false);  // integrate 'free' measurement
+/*//removal is probabilistic
+  for (int x=-20; x<20; x++) {
+    for (int y=-20; y<20; y++) {
+      for (int z=-20; z<20; z++) {
+        point3d endpoint ((float) x*0.05f, (float) y*0.05f, (float) z*0.05f);
+        assert(tsa.RemoveAtomAtTime(t1,1,endpoint));
+        //tree.updateNode(endpoint, true); // integrate 'occupied' measurement
+        //tree.setNodeData(endpoint, 21);//if omitted prune value of 0 is assigned?
       }
     }
   }
 */
+  // insert some measurements of free cells
+// Need to put something to delete atom
+  for (int x=-30; x<30; x++) {
+    for (int y=-30; y<30; y++) {
+      for (int z=-30; z<30; z++) {
+        point3d endpoint ((float) x*0.02f-1.0f, (float) y*0.02f-1.0f, (float) z*0.02f-1.0f);
+        tsa.RemoveAtomAtCurrentTime(1,endpoint);
+        //tree.updateNode(endpoint, false);  // integrate 'free' measurement
+      }
+    }
+  }
+
   cout << endl;
   cout << "performing some queries:" << endl;
-  
   aHandle result;
   point3d query (0., 0., 0.);
+tsa.RemoveAtomAtCurrentTime(1,query);  
   tsa.GetAtomCurrentTime(1,query,result);
   print_query_info(query, result);
 
@@ -71,6 +83,32 @@ int main(int argc, char** argv) {
   tsa.GetAtomCurrentTime(1,query,result);
   print_query_info(query, result);
 
+  cout<<"at time:";
+  query = point3d(0., 0., 0.);
+  tsa.GetAtomAtTime(t1,1,query,result);
+  print_query_info(query, result);
+  
+  cout<<"get times at location:";
+  TimeList tl=tsa.GetTimesOfAtomOccurenceAtLocation(1,query,21);
+  cout<<tl.size()<<endl;
+
+  cout<<"get times in Map:";
+  tl=tsa.GetTimesOfAtomOccurenceInMap(1,21);
+  cout<<tl.size()<<endl;
+  
+  cout<<"get locations at current time:";
+  point3d_list pl=tsa.GetLocationsOfAtomOccurenceNow(1,21);
+  cout<<pl.size()<<endl;
+
+  cout<<"get locations at time:";
+  pl=tsa.GetLocationsOfAtomOccurenceAtTime(t1,1,21);
+  cout<<pl.size()<<endl;
+
+  cout<<"removing atom=21"<<endl;
+  tsa.RemoveAtom(21);
+  query = point3d(0., 0., 0.);
+  tsa.GetAtomCurrentTime(1,query,result);
+  print_query_info(query, result);
 
   cout << endl;
   /*

@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
   }
 
   // insert some measurements of free cells
-/*
+
   for (int x=-30; x<30; x++) {
     for (int y=-30; y<30; y++) {
       for (int z=-30; z<30; z++) {
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
       }
     }
   }
-*/
+
   cout << endl;
   cout << "performing some queries:" << endl;
   

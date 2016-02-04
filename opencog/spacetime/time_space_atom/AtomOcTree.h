@@ -16,7 +16,7 @@ namespace octomap {
     
     //AtomOcTree(const AtomOcTree&)=default;
     //AtomOcTree(const AtomOcTree& rhs){setResolution(rhs.getResolution());}
-    void operator=(const AtomOcTree& rhs) {setResolution(rhs.getResolution());}//do not use = to assign this class anywhere but initialization
+    //void operator=(const AtomOcTree& rhs) {setResolution(rhs.getResolution());}//do not use = to assign this class anywhere but initialization
 		
 	
       
