@@ -231,18 +231,26 @@ point3d_list TimeSpaceAtom::GetLocationsOfAtomOccurenceAtTime(const time_pt& tim
 void TimeSpaceAtom::RemoveAtom(const aHandle& ato)
 {
 	//remove all occurences of atom in all maps at all times
-	point3d_list pl;
+	//point3d_list pl;
 	for(auto tu=std::begin(time_circle), end=std::end(time_circle);(tu!=end);tu++){
 		for(auto it1=std::begin(tu->map_tree),endit1=std::end(tu->map_tree);it1!=endit1;it1++){
-			pl.clear();
+			//pl.clear();
 			for(AtomOcTree::tree_iterator it2 = it1->second.begin_tree(),
 			endit2=it1->second.end_tree(); it2!= endit2; ++it2){
 				if (it2->getData()==ato) {
-					pl.push_back(it2.getCoordinate());
-					//it2->setLogOdds(0); it does not give the same object as real one
-					//oc.push_back(it2.getKey());
+					//pl.push_back(it2.getCoordinate());
+					it2->setData(UndefinedHandle);
+				/*
+					if (it2->hasChildren()){
+						for (int i=0;i<8;i++){
+							if(it2->childExists(i))it2->deleteChild(i);
+						}
+					}
+					
+					it2->setLogOdds(0);
+					it2->pruneNode();
+					*/
 				//cout<<it1->first<<"::"<<it2->getData()<<"::"<<it2.getCoordinate()<<endl;
-				//it2->pruneNode();
 				}
 			};
 			/*
@@ -254,15 +262,15 @@ void TimeSpaceAtom::RemoveAtom(const aHandle& ato)
 				tu->map_tree[it1->first].updateNode(pp,false);
 			};
 			*/
-			
-			//cout<<"remove size="<<pl.size()<<endl;
+		/*	
+			cout<<"remove size="<<pl.size()<<endl;
 			for(auto it3=std::begin(pl),endit3=std::end(pl);it3!=endit3;it3++){
 				//RemoveAtomAtTime(tu->t,it1->first,*it3);
 				//cout<<*it3<<endl;
-				it1->second.updateNode(*it3,false);
+				//it1->second.updateNode(*it3,false);
 				//tu->map_tree[it1->first].updateNode(*it3,false);
 			};
-			
+			*/
 		};
 	};
 }

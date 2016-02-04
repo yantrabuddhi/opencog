@@ -109,7 +109,13 @@ tsa.RemoveAtomAtCurrentTime(1,query);
   query = point3d(0., 0., 0.);
   tsa.GetAtomCurrentTime(1,query,result);
   print_query_info(query, result);
-
+/*
+  cout<<"removing atom=21"<<endl;
+  tsa.RemoveAtom(21);
+  query = point3d(0., 0., 0.);
+  tsa.GetAtomCurrentTime(1,query,result);
+  print_query_info(query, result);
+*/
   cout << endl;
   /*
   tree.writeBinary("simple_tree.bt");
