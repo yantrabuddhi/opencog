@@ -45,7 +45,7 @@ class TimeSpaceAtom{
 	bool GetMapResolution(const int handle,double& res);
 	bool GetCurrentTimeRange(time_pt& time_p,duration_c& duration);
 	bool IsTimePointInRange(const time_pt& time_to_check,const time_pt& t,const duration_c& duration){
-		return (time_to_check>=t && time_to_check<=t+duration);
+		return (time_to_check>=t && time_to_check<t+duration);
 	}
 	bool CreateNewTimeUnit(const time_pt time_p,const duration_c duration);
 	bool PutAtomAtCurrentTime(const int map_handle,const point3d location,const aHandle& ato);

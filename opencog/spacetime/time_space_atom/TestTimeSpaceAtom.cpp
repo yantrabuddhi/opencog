@@ -115,9 +115,9 @@ int main(int argc, char** argv) {
   cout<<pl.size()<<endl;
 
   cout<<"adding units.."<<endl;
-  tsa.CreateNewTimeUnit(t1+dd,dd);
-  tsa.CreateNewTimeUnit(t1+dd+dd,dd);
-  tsa.CreateNewTimeUnit(t1+dd+dd+dd,dd);
+  assert(tsa.CreateNewTimeUnit(t1+dd,dd));
+  assert(tsa.CreateNewTimeUnit(t1+dd+dd,dd));
+  assert(tsa.CreateNewTimeUnit(t1+dd+dd+dd,dd));
   
   cout<<"get locations at time:";
   pl=tsa.GetLocationsOfAtomOccurenceAtTime(t1,1,21);

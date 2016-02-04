@@ -82,7 +82,7 @@ bool TimeSpaceAtom::RemoveAtomAtCurrentTime(const int map_handle,const point3d l
 	int i=time_circle.capacity()-1;
 	if (time_circle.size()<time_circle.capacity()) i=time_circle.size()-1;
 	assert(time_circle[i].has_map(map_handle));
-	time_circle[i].map_tree[map_handle].setNodeData(location,UndefinedHandle);
+	//time_circle[i].map_tree[map_handle].setNodeData(location,UndefinedHandle);
 	time_circle[i].map_tree[map_handle].updateNode(location,false);
 	//time_circle[i].map_tree[map_handle].setNodeData(location,ato);
 	return true;
@@ -94,7 +94,7 @@ bool TimeSpaceAtom::RemoveAtomAtTime(time_pt tp,const int map_handle,const point
 	auto it=std::find(std::begin(time_circle), std::end(time_circle), tp);//time_circle.begin(),time_circle.end()
 	if (it==std::end(time_circle))return false;
 	assert(it->has_map(map_handle));
-	it->map_tree[map_handle].setNodeData(location,UndefinedHandle);
+	//it->map_tree[map_handle].setNodeData(location,UndefinedHandle);
 	it->map_tree[map_handle].updateNode(location,false);
 	//time_circle[i].map_tree[map_handle].setNodeData(location,ato);
 	return true;
@@ -269,7 +269,8 @@ void TimeSpaceAtom::RemoveAtom(const aHandle& ato)
 			for(auto it3=std::begin(pl),endit3=std::end(pl);it3!=endit3;it3++){
 				//RemoveAtomAtTime(tu->t,it1->first,*it3);
 				//cout<<*it3<<endl;
-				it1->second.updateNode(*it3,false);
+				////it1->second.updateNode(*it3,false);
+				it1->second.deleteNode(*it3,false);
 				//tu->map_tree[it1->first].updateNode(*it3,false);
 			};
 			
